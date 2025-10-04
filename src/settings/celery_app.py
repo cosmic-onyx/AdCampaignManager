@@ -15,6 +15,7 @@ celery_app.conf.update(
     accept_content=["json"],
     result_serializer="json",
     task_always_eager=False,
+    worker_pool="asyncio",
     worker_concurrency=4,
     result_expires=3600,
 
@@ -44,4 +45,8 @@ celery_app.conf.beat_schedule = {
         'task': 'event_worker.create_random_event',
         'schedule': 15.0,
     },
+    'execution_event': {
+        'task': 'event_worker.execution_event',
+        'schedule': 120.0,
+    }
 }

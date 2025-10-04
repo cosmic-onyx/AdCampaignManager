@@ -22,16 +22,13 @@ class EventRandomizer:
 
         is_saved = await self.save_cache(account_id, chat_id, campaign_id)
         if is_saved:
-            event_result = await EventRepository().insert_one(
+            await EventRepository().insert_one(
                 {
                     "account_id": account_id,
                     "chat_id": chat_id,
                     "campaign_id": campaign_id
                 }
             )
-
-            event_id = event_result.inserted_primary_key[0]
-            await self.run_event(event_id)
 
             return account_id, chat_id, campaign_id
 
@@ -52,11 +49,3 @@ class EventRandomizer:
             return True
 
         return False
-
-    async def run_event(self, event_id):
-        from tasks.event_worker import execution_event
-
-        execution_event.apply_async(
-            args=[event_id],
-            countdown=120
-        )

@@ -42,5 +42,5 @@ class BaseRepository:
 
         stmt = select(self.model).where(
             and_(*self._build_conditions(filters))
-        )
+        ).order_by(self.model.created_at)
         return await in_db_session(stmt, 'get')
