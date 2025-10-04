@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  ad_campaign_manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      bash -c "cd src && alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8080 --reload"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - postgres_db
+      - redis
+
+  postgres_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ad_campaign_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    hostname: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app/src
+    command: bash -c "python quick_fill_database.py && celery -A settings.celery_app worker --loglevel=info --concurrency=1"
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - postgres_db
+      - redis
+      - ad_campaign_manager
+
+    restart: unless-stopped
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app/src
+    command: celery -A settings.celery_app beat --loglevel=info
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - postgres_db
+      - redis
+      - ad_campaign_manager
+
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+
