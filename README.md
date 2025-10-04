@@ -12,7 +12,7 @@ git clone https://github.com/cosmic-onyx/AdCampaignManager.git
 
 4. Запустите проект
 ```bash
-docker compose up -d --build
+docker compose up --build
 ```
 
 ## API Эндпоинты
