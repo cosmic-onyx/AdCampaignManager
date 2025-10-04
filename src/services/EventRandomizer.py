@@ -41,7 +41,7 @@ class EventRandomizer:
 
         objects = await repository().find(filters)
         count_objects = len(objects.scalars().all())
-        return randint(1, count_objects + 1)
+        return randint(1, count_objects)
 
     async def save_cache(self, account_id, chat_id, campaign_id):
         cache_key = f"{account_id}.{chat_id}"

@@ -18,9 +18,9 @@ services:
   postgres_db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: ad_campaign_manager
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -39,10 +39,11 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /usr/src/app/src
-    command: bash -c "python quick_fill_database.py && celery -A settings.celery_app worker --loglevel=info --concurrency=1"
+    command: bash -c "celery -A settings.celery_app worker --loglevel=info -P gevent"
     volumes:
       - ./src:/usr/src/app/src
     depends_on:
+      - celery-beat
       - postgres_db
       - redis
       - ad_campaign_manager
@@ -54,7 +55,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /usr/src/app/src
-    command: celery -A settings.celery_app beat --loglevel=info
+    command: bash -c "python quick_fill_database.py && celery -A settings.celery_app beat --loglevel=info"
     volumes:
       - ./src:/usr/src/app/src
     depends_on:
