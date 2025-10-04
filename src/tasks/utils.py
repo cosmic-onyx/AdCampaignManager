@@ -1,4 +1,8 @@
+import nest_asyncio
 from asgiref.sync import async_to_sync
+
+
+nest_asyncio.apply()
 
 
 def async_to_sync_task(func):
