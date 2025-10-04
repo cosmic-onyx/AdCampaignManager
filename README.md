@@ -1,4 +1,4 @@
-# PostedAPI
+# AdCampaignManager
 
 ## Установка и запуск
 
@@ -12,14 +12,6 @@ git clone https://github.com/cosmic-onyx/AdCampaignManager.git
 3. Запустите проект
 ```bash
 docker compose up -d --build
-```
-
-## Запуск тестов
-
-```bash
-cd src
-
-python -m pytest
 ```
 
 ## API Эндпоинты
