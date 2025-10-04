@@ -8,8 +8,9 @@ git clone https://github.com/cosmic-onyx/AdCampaignManager.git
 ```
 2. Настройте переменные окружения, 
 скопируйте содержимое .env.example и вставьте в новый созданный вами файл .env
+(заданные параметры по умолчанию, можно не менять)
 
-3. Запустите проект
+4. Запустите проект
 ```bash
 docker compose up -d --build
 ```
