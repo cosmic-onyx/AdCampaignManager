@@ -15,7 +15,6 @@ celery_app.conf.update(
     accept_content=["json"],
     result_serializer="json",
     task_always_eager=False,
-    worker_pool="asyncio",
     worker_concurrency=4,
     result_expires=3600,
 
