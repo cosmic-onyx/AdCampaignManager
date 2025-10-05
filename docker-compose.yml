@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /usr/src/app/src
-    command: bash -c "celery -A settings.celery_app worker --loglevel=info -P gevent"
+    command: bash -c "celery -A settings.celery_app worker --loglevel=info"
     volumes:
       - ./src:/usr/src/app/src
     depends_on:
