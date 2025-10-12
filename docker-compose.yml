@@ -62,7 +62,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /usr/src/app/src
-    command: bash -c "python quick_fill_database.py && celery -A settings.celery_app beat --loglevel=info"
+    command: bash -c "celery -A settings.celery_app beat --loglevel=info"
     volumes:
       - ./src:/usr/src/app/src
     depends_on:
